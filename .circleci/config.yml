@@ -192,8 +192,8 @@ jobs:
       - run:
           name: Configure server
           command: |
-            # touch .env
-            echo ENVIRONMENT=production >> "backend/.env"
+            echo NODE_ENV=production >> "backend/.env"
+            echo VERSION=1 >> "backend/.env"
             echo TYPEORM_CONNECTION=postgres >> "backend/.env" 
             echo TYPEORM_MIGRATIONS_DIR=.src/migrations >> "backend/.env"
             echo TYPEORM_ENTITIES=.src/modules/domain/**/*.entity.ts >> "backend/.env"
@@ -204,8 +204,8 @@ jobs:
             echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> "backend/.env"
             echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> "backend/.env"
             cd .circleci/ansible
-            cat ./inventory.txt
-            export ANSIBLE_HOST_KEY_CHECKING=false
+            cat inventory.txt
+            # export ANSIBLE_HOST_KEY_CHECKING=false
             ansible-playbook -i inventory.txt configure-server.yml
       - destroy-environment:
           workflowID: ${CIRCLE_WORKFLOW_ID:0:7}
