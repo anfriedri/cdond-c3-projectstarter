@@ -192,7 +192,7 @@ jobs:
       - run:
           name: Configure server
           command: |
-            echo ENVIROENMENT=production > "backend/.env"
+            echo ENVIRONMENT=production > "backend/.env"
             echo TYPEORM_CONNECTION=postgres >> "backend/.env" 
             echo TYPEORM_MIGRATIONS_DIR=.src/migrations >> "backend/.env"
             echo TYPEORM_ENTITIES=.src/modules/domain/**/*.entity.ts >> "backend/.env"
@@ -205,7 +205,7 @@ jobs:
             cd .circleci/ansible
            # cat ./.circleci/ansible/inventory.txt
            # export ANSIBLE_HOST_KEY_CHECKING=false
-            ansible-playbook -i inventory.txt configure-server.yml
+            ansible-playbook -i inventory.txt playbook.yml
       - destroy-environment:
           workflowID: ${CIRCLE_WORKFLOW_ID:0:7}
       # Here's where you will add some code to rollback on failure      
