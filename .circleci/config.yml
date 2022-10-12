@@ -191,7 +191,6 @@ jobs:
             pip install awscli
       - run:
           name: Configure server
-          no_output_timeout: 30m
           command: |
             echo ENVIROENMENT=production > "backend/.env"
             echo TYPEORM_CONNECTION=postgres >> "backend/.env" 
