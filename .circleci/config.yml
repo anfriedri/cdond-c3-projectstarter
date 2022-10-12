@@ -191,11 +191,22 @@ jobs:
             pip install awscli
       - run:
           name: Configure server
+          no_output_timeout: 30m
           command: |
-            pwd
-            cat ./.circleci/ansible/inventory.txt
-            export ANSIBLE_HOST_KEY_CHECKING=false
-            ansible-playbook -i ./.circleci/ansible/inventory.txt ./.circleci/ansible/configure-server.yml
+            echo ENVIROENMENT=production > "backend/.env"
+            echo TYPEORM_CONNECTION=postgres >> "backend/.env" 
+            echo TYPEORM_MIGRATIONS_DIR=.src/migrations >> "backend/.env"
+            echo TYPEORM_ENTITIES=.src/modules/domain/**/*.entity.ts >> "backend/.env"
+            echo TYPEORM_MIGRATIONS=.src/migrations/*.ts >> "backend/.env"
+            echo TYPEORM_HOST=$TYPEORM_HOST >> "backend/.env"
+            echo TYPEORM_PORT=$TYPEORM_PORT >> "backend/.env"
+            echo TYPEORM_USERNAME=$TYPEORM_USERNAME >> "backend/.env"
+            echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> "backend/.env"
+            echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> "backend/.env"
+            cd .circleci/ansible
+           # cat ./.circleci/ansible/inventory.txt
+           # export ANSIBLE_HOST_KEY_CHECKING=false
+            ansible-playbook -i inventory.txt configure-server.yml
       - destroy-environment:
           workflowID: ${CIRCLE_WORKFLOW_ID:0:7}
       # Here's where you will add some code to rollback on failure      
