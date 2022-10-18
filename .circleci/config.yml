@@ -162,10 +162,13 @@ jobs:
       - run:
           name: Add back-end ip to ansible inventory
           command: |
-            export BACKEND_IP=$(aws ec2 describe-instances \
+            export BACKEND_IP=$(aws ec2 describe-instances --region us-west-2 \
               --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
               --output text >> .circleci/ansible/inventory.txt)
+            echo "Server_Ip = ${BACKEND_IP}" 
+            echo ${BACKEND_IP} >> inventory.txt
+            cat inventory.txt
       - persist_to_workspace:
           root: ~/
           paths:
@@ -233,7 +236,7 @@ jobs:
           paths:
             - project/backend
       - run:
-          name: Send migration results to memstash
+          name: Send migration results 
           command: |
             if grep -q "has been executed successfully." ~/project/backend/migrations_status.txt
             then
